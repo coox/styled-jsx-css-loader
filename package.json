@@ -4,8 +4,24 @@
   "description": "styled-jsx/css loader for webpack",
   "author": "Eric Redon <eric.redon@coox.org>",
   "license": "MIT",
-  "repository": "coox/styled-jsx-css-loader.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coox/styled-jsx-css-loader.git"
+  },
   "peerDependencies": {
     "styled-jsx": "^2.0.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/coox/styled-jsx-css-loader/issues"
+  },
+  "homepage": "https://github.com/coox/styled-jsx-css-loader#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "styled-jsx",
+    "webpack",
+    "loader"
+  ]
 }
