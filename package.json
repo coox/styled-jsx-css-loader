@@ -1,0 +1,11 @@
+{
+  "name": "styled-jsx-css-loader",
+  "version": "0.1.0",
+  "description": "styled-jsx/css loader for webpack",
+  "author": "Eric Redon <eric.redon@coox.org>",
+  "license": "MIT",
+  "repository": "coox/styled-jsx-css-loader.git",
+  "peerDependencies": {
+    "styled-jsx": "^2.0.1"
+  }
+}
