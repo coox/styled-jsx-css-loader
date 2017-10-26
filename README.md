@@ -35,19 +35,20 @@ The loaded module is intended to be Babel-transformed by styled-jsx. Therefore y
 
 A typical webpack configuration would enable the loader by including a rule similar to this:
 
-```json
-{
-  "module": {
-    "rules": [
+```js
+module.exports = {
+  module: {
+    rules: [
       {
-        "use": [
-          "babel-loader",
-          "styled-jsx-css-loader"
+        test: /\.css$/,
+        use: [
+          'babel-loader',
+          'styled-jsx-css-loader'
         ]
       }
     ]
   }
-}
+};
 ```
 
 In the sample config above, styled-jsx-css-loader is used first, and babel-loader then used to enable transformation of the loaded module by styled-jsx.
