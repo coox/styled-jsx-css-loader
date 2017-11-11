@@ -65,10 +65,16 @@ module.exports = {
           {
             loader: 'emit-file-loader',
             options: {
-              name: 'dist/[path][name].[ext]',
+              name: 'dist/[path][name].[ext].js',
             },
           },
-          'babel-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['next/babel'],
+              plugins: [require.resolve('babel-plugin-transform-es2015-modules-commonjs')]
+            }
+          },
           'styled-jsx-css-loader',
         ],
       }
