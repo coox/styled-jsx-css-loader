@@ -28,12 +28,21 @@ npm install --save-dev styled-jsx-css-loader
 
 ## Configuration
 
-The loaded module is intended to be Babel-transformed by styled-jsx. Therefore you will typically pass styled-jsx-css-loader’s output to [babel-loader](https://github.com/babel/babel-loader), which must use a configuration that:
+The loaded module is intended to be Babel-transformed by styled-jsx.
 
-- transforms module imports
-- includes the [styled-jsx/babel](https://github.com/zeit/styled-jsx/blob/master/src/babel.js) plugin
+In order to properly configure this, you will need to define webpack rules for the type of files you want to load (typically, the CSS files of your project and/or external modules).
 
-A typical webpack configuration would enable the loader by including a rule similar to this:
+These rules **must**:
+
+- first, use [styled-jsx-css-loader](https://github.com/coox/styled-jsx-css-loader)
+- then, pass its output to [babel-loader](https://github.com/babel/babel-loader), ensuring that it is configured to:
+    - transform ES2015 modules (typically using [transform-es2015-modules-commonjs](https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/) or [another Modules plugin](https://babeljs.io/docs/plugins/#transform-plugins-modules))
+    - use the [styled-jsx/babel](https://github.com/zeit/styled-jsx/blob/master/src/babel.js) plugin
+    - not let any other Babel configuration interfere (typically setting the `babelrc` option to `false`) — this is especially important if you import styles from third-party modules
+
+### Basic setup
+
+The simplest way to implement this configuration is to stuff it in a single rule of your webpack configuration file:
 
 ```js
 module.exports = {
@@ -42,7 +51,16 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'babel-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              plugins: [
+                require.resolve('babel-plugin-transform-es2015-modules-commonjs'),
+                require.resolve('styled-jsx/babel'),
+              ]
+            }
+          },
           'styled-jsx-css-loader'
         ]
       }
@@ -51,9 +69,42 @@ module.exports = {
 };
 ```
 
-In the sample config above, styled-jsx-css-loader is used first, and babel-loader then used to enable transformation of the loaded module by styled-jsx.
+With this setup, your project must depend on:
 
-If you are using Next.js, you need to add its [emit-file-loader](https://github.com/zeit/next.js/blob/master/server/build/loaders/emit-file-loader.js), and the configuration would reside in a [next.config.js](https://github.com/zeit/next.js#customizing-webpack-config) file, typically similar to:
+- [babel-loader](https://github.com/babel/babel-loader)
+- [babel-plugin-transform-es2015-modules-commonjs](https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-commonjs)
+- [styled-jsx](https://www.npmjs.com/package/styled-jsx)
+- [styled-jsx-css-loader](https://github.com/coox/styled-jsx-css-loader)
+
+### Setup with Next.js
+
+If you are using [Next.js](https://github.com/zeit/next.js), there are a few more requirements and caveats.
+
+You **must** configure webpack to emit loaded files as JavaScript modules in the `.next/dist` build directory, by using Next.js’ built-in [emit-file-loader](https://github.com/zeit/next.js/blob/master/server/build/loaders/emit-file-loader.js).
+
+It is easier to use Babel presets exclusively (rather than a mix of presets and plugins) in your project’s configuration. Therefore it is **recommended** to leverage the [next/babel](https://github.com/zeit/next.js/blob/canary/server/build/babel/preset.js) preset that is shipped with Next.js:
+
+- to transform ES2015 modules, using the [modules](https://github.com/babel/babel/tree/master/experimental/babel-preset-env#modules) setting of the babel-preset-env plugin, which is part of the next/babel preset
+- to use styled-jsx using the styled-jsx/babel plugin, which is also part of the next/babel preset
+
+Putting it all together, use the following preset in your project’s `.babelrc`:
+
+```json
+{
+  "presets": [
+    [
+      "next/babel",
+      {
+        "preset-env": {
+          "modules": "commonjs"
+        }
+      }
+    ]
+  ]
+}
+```
+
+Then, customize Next.js’ webpack rules in your project’s [next.config.js](https://github.com/zeit/next.js#customizing-webpack-config) file, to use your project’s Babel configuration (and no other) for your CSS files:
 
 ```js
 module.exports = {
@@ -71,9 +122,9 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['next/babel'],
-              plugins: [require.resolve('babel-plugin-transform-es2015-modules-commonjs')]
-            }
+              babelrc: false,
+              extends: path.resolve(__dirname, './.babelrc'),
+            },
           },
           'styled-jsx-css-loader',
         ],
@@ -84,6 +135,12 @@ module.exports = {
   },
 };
 ```
+
+With this setup, your project must depend on:
+
+- [babel-loader](https://github.com/babel/babel-loader)
+- [next](https://github.com/zeit/next.js)
+- [styled-jsx-css-loader](https://github.com/coox/styled-jsx-css-loader)
 
 ## Credits and acknowledgements
 
