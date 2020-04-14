@@ -1,6 +1,18 @@
 # styled-jsx/css loader
 
-A loader for webpack that lets you import CSS files as a [styled-jsx](https://www.npmjs.com/package/styled-jsx) `css`-tagged template literal.
+```diff
+- ⚠️ THIS PROJECT IS NO LONGER MAINTAINED ⚠️ -
+```
+
+**TL;DR:** You are encouraged to use the [`styled-jsx/webpack` loader](https://github.com/zeit/styled-jsx#styles-in-regular-css-files) built [styled-jsx](https://www.npmjs.com/package/styled-jsx) v3+ (also with [Next.js](https://nextjs.org/) v7+) in instead of [styled-jsx/css loader](https://github.com/coox/styled-jsx-css-loader).
+
+---
+
+[styled-jsx/css loader](https://github.com/coox/styled-jsx-css-loader) was a loader for webpack that let you import CSS files as a [styled-jsx](https://www.npmjs.com/package/styled-jsx) `css`-tagged template literal.
+
+This was pretty useful back when styled-jsx v2 was in fashion.
+
+In August 2018, [styled-jsx v3](https://github.com/zeit/styled-jsx/releases/tag/v3.0.0) was released, coming with its own [`styled-jsx/webpack` loader](https://github.com/zeit/styled-jsx#styles-in-regular-css-files). This is essentially a full built-in replacement for styled-jsx/css loader. One month later, it was also included in Next.js [v7](https://nextjs.org/blog/next-7#styled-jsx-v3), further reducing the need of an external styled-jsx/css loader.
 
 ## Usage
 
